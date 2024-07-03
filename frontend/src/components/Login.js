@@ -15,7 +15,7 @@ const Login = () => {
         navigate('/dashboard');
         }
         catch(err){
-            alert('Error: ',err);
+            console.log('Error: ',err);
         }
     };
 

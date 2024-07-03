@@ -5,18 +5,24 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState(null);
-    const [user,setUser]=useState(null);
+    const [user, setUser] = useState(null);
+
     const login = async (username, password) => {
         try {
             const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
             setAuth(response.data);
-            setUser(response.data.user);
+            setUser({ username });  // Set the user state with the username
+            localStorage.setItem('token', response.data.token);
+            return response.data;
         } catch (error) {
-            if(error.response && error.response.data){
-                throw new Error(error.response.data.message);
+            if (error.response && error.response.data) {
+                alert(error.response.data.message);
+                throw error;
             }
-            console.error('Login error', error);
+            else{
+            alert('Error in logging in');
             throw error;
+            }
         }
     };
 
@@ -27,8 +33,7 @@ export const AuthProvider = ({ children }) => {
                 email,
                 password
             });
-            setUser(res.data.user);
-            localStorage.setItem('token',res.data.token);
+            setUser({ username });  // Set the user state with the username
             return res.data;
         } catch (error) {
             if (error.response && error.response.data) {
@@ -38,8 +43,14 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const logout = () => {
+        setAuth(null);
+        setUser(null);
+        localStorage.removeItem('token');
+    };
+
     return (
-        <AuthContext.Provider value={{ auth, login, register }}>
+        <AuthContext.Provider value={{ auth, user, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
