@@ -1,0 +1,117 @@
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate , Link } from 'react-router-dom';
+import axios from "axios";
+
+const AddArticle = () => {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  
+  const [institution, setInstitution] = useState("");
+  const [onCampus, setOnCampus] = useState(true);
+  const [payRange, setPayRange] = useState("");
+  const [role, setRole] = useState("");
+  const [company, setCompany] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const institutions = ["Institution A", "Institution B", "Institution C"];
+  const roles = ["Role A", "Role B", "Role C"];
+  const companies = ["Company A", "Company B", "Company C"];
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("user is ",user._id);
+    try {
+      const newArticle = {
+        author: user._id, 
+        institution,
+        onCampus,
+        payRange: Number(payRange),
+        role,
+        company,
+        title,
+        content,
+      };
+
+      await axios.post('http://localhost:5000/api/articles/add', newArticle);
+      alert('Article added successfully');
+      navigate('/dashboard');
+    } catch (error) {
+      console.error("Error adding article:", error);
+      alert('Error adding article. Please try again.');
+      navigate('/dashboard');
+    }
+  };
+
+  return (
+    <div>
+        {user?
+        (<div>
+      <h2>Add Article</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Institution:</label>
+          <select value={institution} onChange={(e) => setInstitution(e.target.value)} required>
+            <option value="">Select Institution</option>
+            {institutions.map((inst, index) => (
+              <option key={index} value={inst}>{inst}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>On Campus:</label>
+          <select value={onCampus} onChange={(e) => setOnCampus(e.target.value === 'true')} required>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+        <div>
+          <label>Pay Range:</label>
+          <input
+            type="number"
+            value={payRange}
+            onChange={(e) => setPayRange(e.target.value)}
+            placeholder="Pay Range"
+            required
+          />
+        </div>
+        <div>
+          <label>Role:</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)} required>
+            <option value="">Select Role</option>
+            {roles.map((role, index) => (
+              <option key={index} value={role}>{role}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label>Company:</label>
+          <select value={company} onChange={(e) => setCompany(e.target.value)} required>
+            <option value="">Select Company</option>
+            {companies.map((comp, index) => (
+              <option key={index} value={comp}>{comp}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+            <label>Title:</label>
+            <input type='text' value={title} required onChange={(e)=>setTitle(e.target.value)} placeholder="Title"/>
+        </div>
+        <div>
+          <label>Content:</label>
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Write your article here"
+            required
+          />
+        </div>
+        <button type="submit">Add Article</button>
+      </form>
+      </div>):(<div><Link to='/'>You must login first!</Link> </div>)}
+    </div>
+  );
+};
+
+export default AddArticle;

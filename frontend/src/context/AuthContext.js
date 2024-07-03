@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
             setAuth(response.data);
-            setUser({ username });  // Set the user state with the username
+            setUser(response.data.user);
             localStorage.setItem('token', response.data.token);
             return response.data;
         } catch (error) {
@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
                 email,
                 password
             });
-            setUser({ username });  // Set the user state with the username
             return res.data;
         } catch (error) {
             if (error.response && error.response.data) {
