@@ -25,27 +25,34 @@ router.post('/add', async (req, res) => {
     }
 });
 
-router.get('/search', async (req, res) => {
-    const { institution, company, onCampus, minPay, maxPay, role } = req.query;
+// backend/routes/article.js
+
+router.post('/search', async (req, res) => {
+    const { institution, company, onCampus, payRangeLower, payRangeUpper, role } = req.body;
+
+    const query = {};
+    if (institution) query.institution = institution;
+    if (company) query.company = company;
+    if (onCampus !== undefined) query.onCampus = onCampus; // Backend expects a Boolean now
+    if (payRangeLower !== undefined && payRangeUpper !== undefined) query.payRange = { $gte: payRangeLower, $lte: payRangeUpper };
+    if (role) query.role = role;
 
     try {
-        const query = {};
-
-        if (institution) query.institution = institution;
-        if (company) query.company = company;
-        if (onCampus !== undefined) query.onCampus =( onCampus === 'true');
-        if (role) query.role = role;
-        if (minPay !== undefined || maxPay !== undefined) {
-            query.payRange = {};
-            if (minPay !== undefined) query.payRange.$gte = Number(minPay);
-            if (maxPay !== undefined) query.payRange.$lte = Number(maxPay);
-        }
-
-        const articles = await Article.find(query).populate('author', 'username');
+        const articles = await Article.find(query, 'title institution onCampus payRange role company createdAt author').populate('author', 'username');
         res.json(articles);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const article = await Article.findById(req.params.id).populate('author', 'username');
+        res.json(article);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 
 module.exports = router;
+
