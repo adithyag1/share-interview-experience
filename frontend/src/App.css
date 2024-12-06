@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+
+.login{
+  background-color: #DDEEFF;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: black 5px;
+}
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-input{
+  margin: 2%;
+  padding: 10%;
+  border-radius: 2%;
+}
+
+.submit{
+  margin: 2%;
+  background-color: black;
+  color: white;
+}

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-
+import '../App.css'
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -16,36 +16,35 @@ const Register = () => {
             alert('Registration successful');
             navigate('/');
         } catch (error) {
-            alert(`Registration failed: ${error.message}`);
             console.error('Registration error:', error);
         }
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input
+        <div class='login'>
+            <form onSubmit={handleSubmit} class='login-form'>
+                <input class='login-input'
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Username"
                     required
                 />
-                <input
+                <input class='login-input'
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email"
                     required
                 />
-                <input
+                <input class='login-input'
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
                     required
                 />
-                <button type="submit">Register</button>
+                <button type="submit" class='submit'>Register</button>
             </form>
             <div>
                 Already have an account? <Link to='/'>Login</Link>

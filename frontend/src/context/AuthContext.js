@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }) => {
                 throw error;
             }
             else{
-            alert('Error in logging in');
             throw error;
             }
         }
