@@ -1,12 +1,42 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext ,useEffect} from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate , Link } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 const AddArticle = () => {
-  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [cookies,setCookie, removeCookie]=useCookies();
+  const [username,setUsername]=useState();
+  useEffect(() => {
+    const verifyCookie = async () => {
+      try {
+        const { data } = await axios.post(
+          "http://localhost:5000/api/auth",
+          {},
+          { withCredentials: true }
+        );
+        console.log(data);
+        const { status, username } = data;
+        if (!status) {
+          console.log("status false");
+          removeCookie("token", { path: "/" });
+          navigate("/");
+        } else {
+          setUsername(username);
+        }
+      } catch (err) {
+        console.log(err);
+        removeCookie("token", { path: "/" });
+        navigate("/");
+      }
+    };
+    verifyCookie();
+  }, [cookies, setCookie, navigate, removeCookie]);
   
+  
+  const { user } = useContext(AuthContext);
   const [institution, setInstitution] = useState("");
   const [onCampus, setOnCampus] = useState(true);
   const [payRange, setPayRange] = useState("");

@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { userVerification } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 // Register Route
@@ -18,18 +19,16 @@ router.post('/register', async (req, res) => {
         if(existingUser2){
             return res.status(400).json({message:'Email already registered'});
         }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
         const newUser = new User({
             username,
             email,
-            password: hashedPassword
+            password
         });
 
         await newUser.save();
 
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME });
+        console.log(token);
         res.status(201).json({ token });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -39,7 +38,6 @@ router.post('/register', async (req, res) => {
 // Login Route
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-
     try {
         const user = await User.findOne({ username });
         if (!user) {
@@ -49,12 +47,20 @@ router.post('/login', async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ message: 'Incorrect password' });
         }
-
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME });
-        res.status(200).json({ token , user});
+        const token = user.generateAuthToken();
+        res.cookie('token',token,{withCredentials:true, httpOnly:false});
+        res.status(201).json({message:'Login Successful'});
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
+
+router.post('/',userVerification);
+
+router.post('/logout', (req, res) => {
+    res.clearCookie('token', { path: '/', httpOnly: true, sameSite: 'Strict' });
+    res.status(200).json({ message: 'Logged out successfully' });
+});
+
 
 module.exports = router;

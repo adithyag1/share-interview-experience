@@ -2,8 +2,42 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useCookies} from 'react-cookie';
+
+axios.defaults.withCredentials = true;
 
 const SearchArticles = () => {
+
+    const navigate=useNavigate();
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const [username,setUsername]=useState("");
+    useEffect(() => {
+        const verifyCookie = async () => {
+          try {
+            const { data } = await axios.post(
+              "http://localhost:5000/api/auth",
+              {},
+              { withCredentials: true }
+            );
+            console.log(data);
+            const { status, username } = data;
+            if (!status) {
+              console.log("status false");
+              removeCookie("token", { path: "/" });
+              navigate("/");
+            } else {
+              setUsername(username);
+            }
+          } catch (err) {
+            console.log(err);
+            removeCookie("token", { path: "/" });
+            navigate("/");
+          }
+        };
+        verifyCookie();
+      }, [cookies, setCookie, navigate, removeCookie]);
+  
     const [articles, setArticles] = useState([]);
     const [selectedArticle, setSelectedArticle] = useState(null);
 

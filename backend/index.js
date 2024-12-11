@@ -4,11 +4,17 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const articleRoutes= require('./routes/article')
 const cors=require('cors');
+const cookieParser=require('cookie-parser');
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true
+}
+app.use(cors(corsOptions));
+app.use(cookieParser());
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

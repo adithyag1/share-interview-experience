@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 export const AuthContext = createContext();
 
@@ -9,11 +10,11 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
-            setAuth(response.data);
-            setUser(response.data.user);
-            localStorage.setItem('token', response.data.token);
-            return response.data;
+            const {data} = await axios.post('http://localhost:5000/api/auth/login', { username, password },{withCredentials:true});
+            console.log(data);
+            const {success,message} = data;
+            console.log("success is ",success);
+            console.log(message);
         } catch (error) {
             if (error.response && error.response.data) {
                 alert(error.response.data.message);
