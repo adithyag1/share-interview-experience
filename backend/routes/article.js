@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('../models/Article');
+const User = require('../models/User');
 
 router.post('/add', async (req, res) => {
     const { author, institution, onCampus, payRange, role, company,title, content } = req.body;
@@ -19,10 +20,14 @@ router.post('/add', async (req, res) => {
         });
 
         const savedArticle = await newArticle.save();
+        
+        await User.updateOne({_id:author},{$push:{articles:savedArticle._id}});
+
         res.status(201).json(savedArticle);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+
 });
 
 // backend/routes/article.js
@@ -51,6 +56,15 @@ router.get('/:id', async (req, res) => {
         res.json(article);
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/get-user-article/:id',async(req,res)=>{
+    try{
+        const article=await Article.find({author:req.params.id});
+        res.status(200).json(article); 
+    }catch(err){
+        res.status(500).json({error:err.message});
     }
 });
 

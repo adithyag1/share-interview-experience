@@ -3,12 +3,14 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate , Link } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import Navbar from "./Navbar";
 axios.defaults.withCredentials = true;
 
 const AddArticle = () => {
   const navigate = useNavigate();
   const [cookies,setCookie, removeCookie]=useCookies();
   const [username,setUsername]=useState();
+  const [userId,setUserId]=useState();
   useEffect(() => {
     const verifyCookie = async () => {
       try {
@@ -18,13 +20,14 @@ const AddArticle = () => {
           { withCredentials: true }
         );
         console.log(data);
-        const { status, username } = data;
+        const { status, username,_id } = data;
         if (!status) {
           console.log("status false");
           removeCookie("token", { path: "/" });
           navigate("/");
         } else {
           setUsername(username);
+          setUserId(_id);
         }
       } catch (err) {
         console.log(err);
@@ -36,7 +39,6 @@ const AddArticle = () => {
   }, [cookies, setCookie, navigate, removeCookie]);
   
   
-  const { user } = useContext(AuthContext);
   const [institution, setInstitution] = useState("");
   const [onCampus, setOnCampus] = useState(true);
   const [payRange, setPayRange] = useState("");
@@ -51,10 +53,10 @@ const AddArticle = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("user is ",user._id);
+    console.log("user is ",userId);
     try {
       const newArticle = {
-        author: user._id, 
+        author: userId, 
         institution,
         onCampus,
         payRange: Number(payRange),
@@ -64,20 +66,18 @@ const AddArticle = () => {
         content,
       };
 
-      await axios.post('http://localhost:5000/api/articles/add', newArticle);
+      await axios.post('http://localhost:5000/api/article/add', newArticle);
       alert('Article added successfully');
-      navigate('/dashboard');
     } catch (error) {
       console.error("Error adding article:", error);
       alert('Error adding article. Please try again.');
-      navigate('/dashboard');
     }
   };
 
   return (
     <div>
-        {user?
-        (<div>
+      <div>
+        <Navbar />
       <h2>Add Article</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -139,7 +139,7 @@ const AddArticle = () => {
         </div>
         <button type="submit">Add Article</button>
       </form>
-      </div>):(<div><Link to='/'>You must login first!</Link> </div>)}
+      </div>
     </div>
   );
 };

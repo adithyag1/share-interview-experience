@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useCookies} from 'react-cookie';
+import Navbar from './Navbar';
 
 axios.defaults.withCredentials = true;
 
@@ -64,7 +65,7 @@ const SearchArticles = () => {
             if (role) query.role = role;
             if (company) query.company = company;
 
-            const response = await axios.post('http://localhost:5000/api/articles/search', query);
+            const response = await axios.post('http://localhost:5000/api/article/search', query);
             setArticles(response.data);
         } catch (error) {
             console.error('Error fetching articles:', error);
@@ -73,7 +74,7 @@ const SearchArticles = () => {
 
     const fetchArticleContent = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/articles/${id}`);
+            const response = await axios.get(`http://localhost:5000/api/article/${id}`);
             setSelectedArticle(response.data);
         } catch (error) {
             console.error('Error fetching article content:', error);
@@ -82,6 +83,7 @@ const SearchArticles = () => {
 
     return (
         <div>
+            <Navbar />
             <form onSubmit={handleSearch}>
                 <select value={institution} onChange={(e) => setInstitution(e.target.value)}>
                     <option value="">Any Institution</option>

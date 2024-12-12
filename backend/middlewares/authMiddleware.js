@@ -12,8 +12,8 @@ module.exports.userVerification=(req,res)=>{
         }
         const user=await User.findById(data._id);
         if(user){
-            const {username}=user;
-            return res.json({status:true, username:username});
+            const {_id,username}=user;
+            return res.json({status:true, _id,username});
         }
         return res.json({status:false});
     });

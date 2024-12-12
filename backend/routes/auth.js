@@ -26,10 +26,7 @@ router.post('/register', async (req, res) => {
         });
 
         await newUser.save();
-
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME });
-        console.log(token);
-        res.status(201).json({ token });
+        res.status(201).json({ message: 'Registered Successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -48,7 +45,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Incorrect password' });
         }
         const token = user.generateAuthToken();
-        res.cookie('token',token,{withCredentials:true, httpOnly:false});
+        res.cookie('token',token,{withCredentials:true, httpOnly:true});
         res.status(201).json({message:'Login Successful'});
     } catch (err) {
         res.status(500).json({ error: err.message });

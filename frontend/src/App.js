@@ -6,6 +6,7 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import AddArticle from './components/AddArticle';
 import SearchArticles from './components/SearchArticles';
+import MyArticles from './components/MyArticles';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/add-article" element={<AddArticle />} />
+                    <Route path='/my-articles' element={<MyArticles />} />
                     <Route path="/search-articles" element={<SearchArticles />}/>
             </Routes>
         </Router>
