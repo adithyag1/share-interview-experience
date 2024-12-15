@@ -56,6 +56,11 @@ const MyArticles = () =>{
     getArticles();
 },[userId]);
 
+const handleEdit=(_id)=>{
+    //console.log("hi");
+    navigate(`/edit-article/${_id}`);
+};
+
     return (
         <div>
             <Navbar />
@@ -73,6 +78,7 @@ const MyArticles = () =>{
                             <p>{article.role}</p>
                             <p>{article.company}</p>
                             <p>{new Date(article.createdAt).toLocaleDateString()}</p>
+                            <button onClick={()=>handleEdit(article._id)}>Edit</button>
                         </li>
                     ))}
                 </div>)

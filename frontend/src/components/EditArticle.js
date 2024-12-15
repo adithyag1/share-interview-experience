@@ -1,15 +1,31 @@
-import React, { useState, useContext ,useEffect} from "react";
-import { useNavigate , Link } from 'react-router-dom';
+import React, { useState ,useEffect} from "react";
+import { useNavigate , useParams } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import Navbar from "./Navbar";
 axios.defaults.withCredentials = true;
 
-const AddArticle = () => {
+const EditArticle = () => {
   const navigate = useNavigate();
   const [cookies,setCookie, removeCookie]=useCookies();
   const [username,setUsername]=useState();
   const [userId,setUserId]=useState();
+
+  const [loading,setLoading]=useState(true);
+  const {id}=useParams();
+  const [institution, setInstitution] = useState("");
+  const [onCampus, setOnCampus] = useState(true);
+  const [payRange, setPayRange] = useState("");
+  const [role, setRole] = useState("");
+  const [company, setCompany] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const [article,setArticle] = useState(null);
+  const institutions = ["Institution A", "Institution B", "Institution C"];
+  const roles = ["Role A", "Role B", "Role C"];
+  const companies = ["Company A", "Company B", "Company C"];
+
   useEffect(() => {
     const verifyCookie = async () => {
       try {
@@ -18,10 +34,8 @@ const AddArticle = () => {
           {},
           { withCredentials: true }
         );
-        console.log(data);
         const { status, username,_id } = data;
         if (!status) {
-          console.log("status false");
           removeCookie("token", { path: "/" });
           navigate("/");
         } else {
@@ -36,19 +50,34 @@ const AddArticle = () => {
     };
     verifyCookie();
   }, [cookies, setCookie, navigate, removeCookie]);
-  
-  
-  const [institution, setInstitution] = useState("");
-  const [onCampus, setOnCampus] = useState(true);
-  const [payRange, setPayRange] = useState("");
-  const [role, setRole] = useState("");
-  const [company, setCompany] = useState("");
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-
-  const institutions = ["Institution A", "Institution B", "Institution C"];
-  const roles = ["Role A", "Role B", "Role C"];
-  const companies = ["Company A", "Company B", "Company C"];
+    
+  useEffect(()=>{
+  const fetchArticle = async() => {
+    try{
+        const res=await axios.get(`http://localhost:5000/api/article/${id}`);
+        if(res && res.data){
+            setInstitution(res.data.institution);
+            setCompany(res.data.company);
+            setOnCampus(res.data.onCampus);
+            setPayRange(res.data.payRange);
+            setRole(res.data.role);
+            setTitle(res.data.title);
+            setContent(res.data.content);
+            setLoading(false);
+        }
+        else{
+            console.log('Article not found');
+            setLoading(false);
+        }
+    }
+    catch(err){
+        console.log(err);
+    } finally{
+        setLoading(false);
+    }
+  }
+  fetchArticle();
+},[id,cookies,navigate,removeCookie,setCookie]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,21 +92,25 @@ const AddArticle = () => {
         company,
         title,
         content,
+        _id:id
       };
 
-      await axios.post('http://localhost:5000/api/article/add', newArticle);
-      alert('Article added successfully');
+      await axios.post('http://localhost:5000/api/article/edit', newArticle);
+      alert('Article updated successfully');
     } catch (error) {
       console.error("Error adding article:", error);
       alert('Error adding article. Please try again.');
-    }
+    } 
   };
 
   return (
     <div>
       <div>
         <Navbar />
-      <h2>Add Article</h2>
+        { loading?(<div>Loading...</div>):
+        (
+            <div>
+      <h2>Edit Article</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Institution:</label>
@@ -136,11 +169,13 @@ const AddArticle = () => {
             required
           />
         </div>
-        <button type="submit">Add Article</button>
+        <button type="submit">Edit Article</button>
       </form>
+      </div>)
+}
       </div>
     </div>
   );
 };
 
-export default AddArticle;
+export default EditArticle;

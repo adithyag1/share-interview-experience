@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import AddArticle from './components/AddArticle';
 import SearchArticles from './components/SearchArticles';
 import MyArticles from './components/MyArticles';
+import EditArticle from './components/EditArticle';
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/add-article" element={<AddArticle />} />
+                    <Route path='/edit-article/:id' element={<EditArticle />}/>
                     <Route path='/my-articles' element={<MyArticles />} />
                     <Route path="/search-articles" element={<SearchArticles />}/>
             </Routes>

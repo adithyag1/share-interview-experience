@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Article = require('../models/Article');
 const User = require('../models/User');
+const { default: mongoose } = require('mongoose');
+const ObjectId=mongoose.Types.ObjectId;
 
 router.post('/add', async (req, res) => {
     const { author, institution, onCampus, payRange, role, company,title, content } = req.body;
@@ -30,7 +32,20 @@ router.post('/add', async (req, res) => {
 
 });
 
-// backend/routes/article.js
+router.post('/edit', async(req,res)=>{
+    try{
+    const {_id,institution,company,onCampus,payRange,role,title,content}=req.body;
+    const articleId=ObjectId.createFromHexString(_id);
+    const x=await Article.findById(articleId);
+    await Article.updateOne({_id:articleId},{$set:{institution,company,onCampus,payRange,role,title,content}});   
+    User.updateOne(); 
+        res.status(201).json({message:'updatd successfully'});
+}
+    catch(err){
+        res.status(500).json({err});
+    }
+}
+);
 
 router.post('/search', async (req, res) => {
     const { institution, company, onCampus, payRangeLower, payRangeUpper, role } = req.body;
