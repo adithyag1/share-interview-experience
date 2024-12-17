@@ -65,3 +65,64 @@
   background-color: black;
   color: white;
 }
+
+.about-article{
+  display: flex;
+  flex-direction: row;
+  width: 90vw;
+  align-items: center;
+  justify-content: space-evenly
+}
+
+.article{
+  cursor: pointer;
+  margin: 2%;
+  border:2px solid black;
+  padding: 1%;
+}
+
+.navbar{
+  margin: 1%;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #DDEEFF;
+}
+
+.home{
+  cursor: pointer;
+  align-items: center;
+  color: black;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.logout{
+  cursor: pointer;
+  background-color: #DDEEFF;
+  border: none;
+  font-size: 16px;
+}
+
+.welcome{
+  display: flex;
+  justify-content: center;
+}
+
+.links{
+  display:flex;
+  flex-direction: column;
+  justify-content:space-evenly;
+}
+
+.link{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  justify-content: center;
+  background-color: cyan;
+  height:15vh;
+  margin: 5vh;
+}
+

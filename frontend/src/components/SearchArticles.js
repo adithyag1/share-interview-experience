@@ -70,14 +70,15 @@ const SearchArticles = () => {
         }
     };
 
-    const fetchArticleContent = async (id) => {
-        try {
-            const response = await axios.get(`http://localhost:5000/api/article/${id}`);
-            setSelectedArticle(response.data);
-        } catch (error) {
-            console.error('Error fetching article content:', error);
+
+    const showArticleContent=async (id) =>{
+        try{
+            navigate(`/show-article/${id}`);
         }
-    };
+        catch(err){
+            console.log('error in opening full article');
+        }
+    }
 
     return (
         <div>
@@ -116,19 +117,21 @@ const SearchArticles = () => {
             </form>
 
             {articles.length > 0 && (
-                <ul>
+                <div>
                     {articles.map(article => (
-                        <li key={article._id} onClick={() => fetchArticleContent(article._id)}>
-                            <h3>{article.title}</h3>
-                            <p>{article.institution}</p>
-                            <p>{article.onCampus ? "On Campus" : "Off Campus"}</p>
-                            <p>{article.payRange}</p>
-                            <p>{article.role}</p>
-                            <p>{article.company}</p>
-                            <p>{new Date(article.createdAt).toLocaleDateString()}</p>
-                        </li>
+                        <div class ='article' key={article._id} onClick={() => showArticleContent(article._id)}>
+                            <h3><u>{article.title}</u></h3>
+                            <div class='about-article'>
+                                <p>{article.institution}</p>
+                                <p>{article.onCampus ? "On Campus" : "Off Campus"}</p>
+                                <p>{article.payRange}</p>
+                                <p>{article.role}</p>
+                                <p>{article.company}</p>
+                                <p>{new Date(article.createdAt).toLocaleDateString()}</p>
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
 
             {selectedArticle && (

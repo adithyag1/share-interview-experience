@@ -64,22 +64,22 @@ const handleEdit=(_id)=>{
     return (
         <div>
             <Navbar />
-            <div>{username}</div>
             {
                 loading? (<div>Loading...</div>):
                 articles.length>0 ? 
                 (<div>
                     {articles.map(article=>(
-                        <li key={article._id}>
-                            <h3>{article.title}</h3>
-                            <p>{article.institution}</p>
-                            <p>{article.onCampus ? "On Campus" : "Off Campus"}</p>
-                            <p>{article.payRange}</p>
-                            <p>{article.role}</p>
-                            <p>{article.company}</p>
-                            <p>{new Date(article.createdAt).toLocaleDateString()}</p>
-                            <button onClick={()=>handleEdit(article._id)}>Edit</button>
-                        </li>
+                        <div class='article' key={article._id} onClick={()=>handleEdit(article._id)}>
+                            <h3><u>{article.title}</u></h3>
+                                <div class='about-article'>
+                                <p>{article.institution}</p>
+                                <p>{article.onCampus ? "On Campus" : "Off Campus"}</p>
+                                <p>{article.payRange}</p>
+                                <p>{article.role}</p>
+                                <p>{article.company}</p>
+                                <p>{new Date(article.createdAt).toLocaleDateString()}</p>
+                            </div>
+                        </div>
                     ))}
                 </div>)
                 :

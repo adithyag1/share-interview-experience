@@ -38,10 +38,12 @@ const Dashboard = () => {
     <div>
       <div>
         <Navbar />
-        <h1>Welcome, {username}!</h1>
-        <Link to="/add-article">Add Your Experience</Link>
-        <Link to="/search-articles">Search Experiences</Link>
-        <Link to='/my-articles'>My Articles</Link>
+        <h1 class='welcome'>Welcome, {username}!</h1>
+        <div class='links'>
+        <Link to="/add-article" class='link'>Add Your Experience</Link>
+        <Link to="/search-articles" class='link'>Search Experiences</Link>
+        <Link to='/my-articles' class='link'>My Articles</Link>
+        </div>
       </div>
     </div>
   );

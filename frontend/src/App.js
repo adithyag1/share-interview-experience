@@ -8,6 +8,7 @@ import AddArticle from './components/AddArticle';
 import SearchArticles from './components/SearchArticles';
 import MyArticles from './components/MyArticles';
 import EditArticle from './components/EditArticle';
+import ShowArticle from './components/ShowArticle';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route path='/edit-article/:id' element={<EditArticle />}/>
                     <Route path='/my-articles' element={<MyArticles />} />
                     <Route path="/search-articles" element={<SearchArticles />}/>
+                    <Route path='/show-article/:id' element={<ShowArticle />}/>
             </Routes>
         </Router>
       </AuthProvider>
