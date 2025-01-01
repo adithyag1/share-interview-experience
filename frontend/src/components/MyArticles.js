@@ -6,7 +6,6 @@ import Navbar from "./Navbar";
 
 const MyArticles = () =>{
     const [cookies,setCookie,removeCookie]=useCookies();
-    const [username,setUsername]=useState('');
     const [userId,setUserId]=useState('');
     const [articles,setArticles]=useState([]);
     const [loading,setLoading]=useState(true);
@@ -19,21 +18,16 @@ const MyArticles = () =>{
                     {},
                     {withCredentials:true}
                 );
-                const {status,_id,username}=data;
+                const {status,_id}=data;
                 if(!status){
-                    console.log('status false');
                     removeCookie('token',{path:'/'});
                     navigate('/');
                 }
                 else{
-                    console.log('status true');
-                    setUsername(username);
                     setUserId(_id);
-                    console.log('user id is',_id,":: ",userId);
                 }
             }
             catch(err){
-                console.log('caught ',err);
                 removeCookie('token',{path:'/'});
                 navigate('/');
             }
@@ -43,7 +37,6 @@ const MyArticles = () =>{
 
     useEffect(()=>{
     const getArticles=async()=>{
-        console.log('before con user id',userId);
         try{
         const res=await axios.get(`http://localhost:5000/api/article/get-user-article/${userId}`);
         console.log(res.data);
@@ -72,7 +65,7 @@ const handleEdit=(_id)=>{
                         <div class='article' key={article._id} onClick={()=>handleEdit(article._id)}>
                             <h3><u>{article.title}</u></h3>
                                 <div class='about-article'>
-                                <p>{article.institution}</p>
+                                <p>{article.institute}</p>
                                 <p>{article.onCampus ? "On Campus" : "Off Campus"}</p>
                                 <p>{article.payRange}</p>
                                 <p>{article.role}</p>

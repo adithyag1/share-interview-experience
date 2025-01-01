@@ -29,7 +29,7 @@ const ShowArticle = () => {
         <div class="article-container">
           <div class="article-title">{article.title}</div>
           <div class="about-article">
-            <p>{article.institution}</p>
+            <p>{article.institute}</p>
             <p>{article.onCampus ? "On Campus" : "Off Campus"}</p>
             <p>{article.payRange}</p>
             <p>{article.role}</p>

@@ -6,12 +6,12 @@ const { default: mongoose } = require('mongoose');
 const ObjectId=mongoose.Types.ObjectId;
 
 router.post('/add', async (req, res) => {
-    const { author, institution, onCampus, payRange, role, company,title, content } = req.body;
+    const { author, institute, onCampus, payRange, role, company,title, content } = req.body;
 
     try {
         const newArticle = new Article({
             author,
-            institution,
+            institute,
             onCampus,
             payRange,
             role,
@@ -34,10 +34,9 @@ router.post('/add', async (req, res) => {
 
 router.post('/edit', async(req,res)=>{
     try{
-    const {_id,institution,company,onCampus,payRange,role,title,content}=req.body;
+    const {_id,institute,company,onCampus,payRange,role,title,content}=req.body;
     const articleId=ObjectId.createFromHexString(_id);
-    const x=await Article.findById(articleId);
-    await Article.updateOne({_id:articleId},{$set:{institution,company,onCampus,payRange,role,title,content}});   
+    await Article.updateOne({_id:articleId},{$set:{institute,company,onCampus,payRange,role,title,content}});   
     User.updateOne(); 
         res.status(201).json({message:'updatd successfully'});
 }
@@ -48,17 +47,18 @@ router.post('/edit', async(req,res)=>{
 );
 
 router.post('/search', async (req, res) => {
-    const { institution, company, onCampus, payRangeLower, payRangeUpper, role } = req.body;
+    const { institute, company, onCampus, payRangeLower, payRangeUpper, role } = req.body;
 
     const query = {};
-    if (institution) query.institution = institution;
+    if (institute) query.institute = institute;
     if (company) query.company = company;
     if (onCampus !== undefined) query.onCampus = onCampus; // Backend expects a Boolean now
     if (payRangeLower !== undefined && payRangeUpper !== undefined) query.payRange = { $gte: payRangeLower, $lte: payRangeUpper };
     if (role) query.role = role;
 
     try {
-        const articles = await Article.find(query, 'title institution onCampus payRange role company createdAt author').populate('author', 'username');
+        const articles = await Article.find(query, 'title institute onCampus payRange role company createdAt author').populate('author', 'username');
+        console.log('search results: ',articles);
         res.json(articles);
     } catch (err) {
         res.status(500).json({ error: err.message });

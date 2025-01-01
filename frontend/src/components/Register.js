@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
@@ -32,7 +31,22 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { register } = useContext(AuthContext);
+
+    const register = async (username, email, password) => {
+      try {
+          const res = await axios.post('http://localhost:5000/api/auth/register', {
+              username,
+              email,
+              password
+          });
+          return res.data;
+      } catch (error) {
+          if (error.response && error.response.data) {
+              throw new Error(error.response.data.message);
+          }
+          throw new Error('An unknown error occurred during registration');
+      }
+  };
 
     const handleSubmit = async (e) => {
         e.preventDefault();

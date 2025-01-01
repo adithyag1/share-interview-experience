@@ -1,5 +1,5 @@
-import React, { useState, useContext ,useEffect} from "react";
-import { useNavigate , Link } from 'react-router-dom';
+import React, { useState ,useEffect} from "react";
+import { useNavigate  } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import Navbar from "./Navbar";
@@ -8,7 +8,6 @@ axios.defaults.withCredentials = true;
 const AddArticle = () => {
   const navigate = useNavigate();
   const [cookies,setCookie, removeCookie]=useCookies();
-  const [username,setUsername]=useState();
   const [userId,setUserId]=useState();
   useEffect(() => {
     const verifyCookie = async () => {
@@ -19,13 +18,12 @@ const AddArticle = () => {
           { withCredentials: true }
         );
         console.log(data);
-        const { status, username,_id } = data;
+        const { status,_id } = data;
         if (!status) {
           console.log("status false");
           removeCookie("token", { path: "/" });
           navigate("/");
         } else {
-          setUsername(username);
           setUserId(_id);
         }
       } catch (err) {
@@ -38,7 +36,7 @@ const AddArticle = () => {
   }, [cookies, setCookie, navigate, removeCookie]);
   
   
-  const [institution, setInstitution] = useState("");
+  const [institute, setInstitute] = useState("");
   const [onCampus, setOnCampus] = useState(true);
   const [payRange, setPayRange] = useState("");
   const [role, setRole] = useState("");
@@ -46,7 +44,7 @@ const AddArticle = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const institutions = ["Institution A", "Institution B", "Institution C"];
+  const institutes = ["Institute A", "Institute B", "Institute C"];
   const roles = ["Role A", "Role B", "Role C"];
   const companies = ["Company A", "Company B", "Company C"];
 
@@ -56,7 +54,7 @@ const AddArticle = () => {
     try {
       const newArticle = {
         author: userId, 
-        institution,
+        institute,
         onCampus,
         payRange: Number(payRange),
         role,
@@ -80,10 +78,10 @@ const AddArticle = () => {
       <h2>Add Article</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Institution:</label>
-          <select value={institution} onChange={(e) => setInstitution(e.target.value)} required>
-            <option value="">Select Institution</option>
-            {institutions.map((inst, index) => (
+          <label>Institute:</label>
+          <select value={institute} onChange={(e) => setInstitute(e.target.value)} required>
+            <option value="">Select Institute</option>
+            {institutes.map((inst, index) => (
               <option key={index} value={inst}>{inst}</option>
             ))}
           </select>

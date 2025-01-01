@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React, { useState, useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
@@ -31,7 +30,25 @@ const Login = () => {
     }, [cookies, setCookie, navigate, removeCookie]);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState('');
-    const { login } = useContext(AuthContext);
+
+    const login = async (username, password) => {
+      try {
+          const {data} = await axios.post('http://localhost:5000/api/auth/login', { username, password },{withCredentials:true});
+          console.log(data);
+          const {success,message} = data;
+          console.log("success is ",success);
+          console.log(message);
+      } catch (error) {
+          if (error.response && error.response.data) {
+              alert(error.response.data.message);
+              throw error;
+          }
+          else{
+          throw error;
+          }
+      }
+  };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{

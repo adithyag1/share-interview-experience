@@ -8,21 +8,19 @@ axios.defaults.withCredentials = true;
 const EditArticle = () => {
   const navigate = useNavigate();
   const [cookies,setCookie, removeCookie]=useCookies();
-  const [username,setUsername]=useState();
   const [userId,setUserId]=useState();
 
   const [loading,setLoading]=useState(true);
   const {id}=useParams();
-  const [institution, setInstitution] = useState("");
-  const [onCampus, setOnCampus] = useState(true);
+  const [institute, setInstitute] = useState("");
+  const [onCampus, setOnCampus] = useState(false);
   const [payRange, setPayRange] = useState("");
   const [role, setRole] = useState("");
   const [company, setCompany] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const [article,setArticle] = useState(null);
-  const institutions = ["Institution A", "Institution B", "Institution C"];
+  const institutes = ["Institute A", "Institute B", "Institute C"];
   const roles = ["Role A", "Role B", "Role C"];
   const companies = ["Company A", "Company B", "Company C"];
 
@@ -34,12 +32,11 @@ const EditArticle = () => {
           {},
           { withCredentials: true }
         );
-        const { status, username,_id } = data;
+        const { status,_id } = data;
         if (!status) {
           removeCookie("token", { path: "/" });
           navigate("/");
         } else {
-          setUsername(username);
           setUserId(_id);
         }
       } catch (err) {
@@ -56,7 +53,7 @@ const EditArticle = () => {
     try{
         const res=await axios.get(`http://localhost:5000/api/article/${id}`);
         if(res && res.data){
-            setInstitution(res.data.institution);
+            setInstitute(res.data.institute);
             setCompany(res.data.company);
             setOnCampus(res.data.onCampus);
             setPayRange(res.data.payRange);
@@ -85,7 +82,7 @@ const EditArticle = () => {
     try {
       const newArticle = {
         author: userId, 
-        institution,
+        institute,
         onCampus,
         payRange: Number(payRange),
         role,
@@ -113,10 +110,10 @@ const EditArticle = () => {
       <h2>Edit Article</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Institution:</label>
-          <select value={institution} onChange={(e) => setInstitution(e.target.value)} required>
-            <option value="">Select Institution</option>
-            {institutions.map((inst, index) => (
+          <label>Institute:</label>
+          <select value={institute} onChange={(e) => setInstitute(e.target.value)} required>
+            <option value="">Select Institute</option>
+            {institutes.map((inst, index) => (
               <option key={index} value={inst}>{inst}</option>
             ))}
           </select>
