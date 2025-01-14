@@ -3,12 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Navbar from "./Navbar";
 import axios from "axios";
-import AddArticle from "./AddArticle";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies();
   const [username, setUsername] = useState("");
+  const [nameLoaded,setNameLoaded]=useState(false);
   useEffect(() => {
     const verifyCookie = async () => {
       try {
@@ -25,6 +25,8 @@ const Dashboard = () => {
           navigate("/");
         } else {
           setUsername(username);
+          setNameLoaded(true);
+
         }
       } catch (err) {
         console.log(err);
@@ -38,7 +40,10 @@ const Dashboard = () => {
     <div>
       <div>
         <Navbar />
+        {nameLoaded&&
         <h1 class='welcome'>Welcome, {username}!</h1>
+}
+        
         <div class='links'>
         <Link to="/add-article" class='link'>Add Your Experience</Link>
         <Link to="/search-articles" class='link'>Search Experiences</Link>
