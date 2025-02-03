@@ -206,11 +206,11 @@ const SearchArticles = () => {
             </option>
           ))}
         </select>
-        <button type="submit">Search</button>
-        <button onClick={(e) => handleClearFilter(e)}>Clear</button>
+        <button type="submit" class='cursor-pointer'>Search</button>
+        <button onClick={(e) => handleClearFilter(e)} class="cursor-pointer">Clear</button>
       </form>
 
-      {articles.length > 0 && (
+      {articles.length > 0 ? (
         <div>
           {articles.map((article) => (
             <div
@@ -232,7 +232,7 @@ const SearchArticles = () => {
             </div>
           ))}
         </div>
-      )}
+      ):(<p>No matches found!</p>)}
       </div>
     )}
     </div>

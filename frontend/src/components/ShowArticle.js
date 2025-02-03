@@ -41,7 +41,7 @@ const ShowArticle = () => {
           </div>
         </div>
       ) : (
-        <div>Article Not FOund</div>
+        <div>Article Not Found</div>
       )}
     </>
   );

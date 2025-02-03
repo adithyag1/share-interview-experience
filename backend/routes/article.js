@@ -58,7 +58,6 @@ router.post('/search', async (req, res) => {
 
     try {
         const articles = await Article.find(query, 'title institute onCampus payRange role company createdAt author').populate('author', 'username');
-        console.log('search results: ',articles);
         res.json(articles);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -78,6 +77,15 @@ router.get('/get-user-article/:id',async(req,res)=>{
     try{
         const article=await Article.find({author:req.params.id});
         res.status(200).json(article); 
+    }catch(err){
+        res.status(500).json({error:err.message});
+    }
+});
+
+router.delete('/delete/:id',async(req,res)=>{
+    try{
+        await Article.findByIdAndDelete(req.params.id);
+        res.status(200).json({message:"Deleted successfully"});
     }catch(err){
         res.status(500).json({error:err.message});
     }

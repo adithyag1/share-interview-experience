@@ -165,7 +165,7 @@ const EditArticle = () => {
             required
           />
         </div>
-        <button type="submit" class='article-form-submit'>Edit Article</button>
+        <button type="submit" class='article-form-submit cursor-pointer'>Edit Article</button>
       </form>
       </div>)
 }

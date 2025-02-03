@@ -65,6 +65,13 @@ const AddArticle = () => {
 
       await axios.post('http://localhost:5000/api/article/add', newArticle);
       alert('Article added successfully');
+      setInstitute("");
+      setOnCampus(true);
+      setPayRange("");
+      setRole("");
+      setCompany("");
+      setTitle("");
+      setContent("");
     } catch (error) {
       console.error("Error adding article:", error);
       alert('Error adding article. Please try again.');
@@ -134,7 +141,7 @@ const AddArticle = () => {
             required
           />
         </div>
-        <button type="submit" class='article-form-submit'>Add Article</button>
+        <button type="submit" class='article-form-submit cursor-pointer'>Add Article</button>
       </form>
       </div>
     </div>
